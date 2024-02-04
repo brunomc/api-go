@@ -14,7 +14,22 @@ type CreateOpeningRequest struct {
 	Link     string `json:"link"`
 	Salary   int64  `json:"salary"`
 }
+type UpdateOpeningRequest struct {
+	Role     string `json:"role"`
+	Company  string `json:"company"`
+	Location string `json:"location"`
+	Remote   *bool  `json:"remote"`
+	Link     string `json:"link"`
+	Salary   int64  `json:"salary"`
+}
 
+func (r *UpdateOpeningRequest) Validate() error {
+	if r.Role != "" || r.Location != "" || r.Company != "" || r.Link != "" || r.Remote != nil || r.Salary > 0 {
+		return nil
+	}
+
+	return fmt.Errorf("at least one field must be provided")
+}
 func (r *CreateOpeningRequest) Validate() error {
 	if r.Role == "" && r.Location == "" && r.Company == "" && r.Link == "" {
 		return errParamIsRequired("body is empty", "-")
